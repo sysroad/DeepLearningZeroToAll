@@ -1,31 +1,26 @@
-# Lab 3 Minimizing Cost
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
-X = [1, 2, 3]
-Y = [1, 2, 3]
+X = tf.constant([1, 2, 3], dtype=tf.float32)
+Y = tf.constant([1, 2, 3], dtype=tf.float32)
 
-W = tf.placeholder(tf.float32)
+W = tf.Variable(initial_value=0, dtype=tf.float32)
 
-# Our hypothesis for linear model X * W
-hypothesis = X * W
+# prepare list
+W_val = []
+cost_val = []
 
-# cost/loss function
-cost = tf.reduce_mean(tf.square(hypothesis - Y))
+learning_rate = 0.1
 
-# Variables for plotting cost function
-W_history = []
-cost_history = []
+for i in range(-30, 50):
+    W = float(i) * learning_rate
 
-# Launch the graph in a session.
-with tf.Session() as sess:
-    for i in range(-30, 50):
-        curr_W = i * 0.1
-        curr_cost = sess.run(cost, feed_dict={W: curr_W})
+    cost = tf.reduce_mean(
+        tf.square(tf.subtract(tf.multiply(X, W), Y))
+    )
 
-        W_history.append(curr_W)
-        cost_history.append(curr_cost)
+    W_val.append(W)
+    cost_val.append(cost)
 
-# Show the cost function
-plt.plot(W_history, cost_history)
+plt.plot(W_val, cost_val)
 plt.show()
